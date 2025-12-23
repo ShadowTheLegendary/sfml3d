@@ -12,6 +12,8 @@
 
 #include <unordered_map>
 
+#include "object3d.hpp"
+
 namespace sf {
     namespace _3D {
 
@@ -39,7 +41,7 @@ namespace sf {
         //    Voxel    //
         /////////////////
 
-        class Voxel {
+        class Voxel : public Object3D {
         public:
             Voxel& operator=(const Voxel& other) {
                 if (this != &other) {
@@ -89,6 +91,10 @@ namespace sf {
 
             void set_face_color(FACE face, Color color);
 
+            int get_voxel_size() const {
+                return voxel_size;
+            }
+
         private:
             void shrink(double amount) {
                 for (sf::Vector3<double>& point : points) {
@@ -117,8 +123,8 @@ namespace sf {
             std::vector<std::pair<double, OutlineRect>> i_depth_sorted_shapes;
 
             const std::unordered_map < FACE, std::tuple<int, int, int, int> > i_FACES = {
-                {FACE::FRONT, std::make_tuple(0, 1, 2, 3)},
-                {FACE::BACK, std::make_tuple(4, 5, 6, 7)},
+                {FACE::FRONT, std::make_tuple(4, 5, 6, 7)},
+                {FACE::BACK, std::make_tuple(0, 1, 2, 3)},
                 {FACE::TOP, std::make_tuple(0, 1, 6, 7)},
                 {FACE::BOTTOM, std::make_tuple(2, 3, 4, 5)},
                 {FACE::RIGHT, std::make_tuple(1, 2, 5, 6)},

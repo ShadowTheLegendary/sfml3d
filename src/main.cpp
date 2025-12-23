@@ -39,10 +39,11 @@ int main() {
     window.setFramerateLimit(60);
 
     Voxel voxel(sf::Vector3<double>(8, 8, 8));
-    voxel.set_face_color(Voxel::FACE::FRONT, sf::Color::Blue);
+    //voxel.set_face_color(Voxel::FACE::FRONT, sf::Color::Blue);
     voxel.set_face_color(Voxel::FACE::BACK, sf::Color::Red);
 
-    std::vector<Voxel> voxels = { voxel };
+    std::vector<Voxel> voxels;
+    voxels.emplace_back(voxel);
 
     Camera3D camera(sf::Vector3f(0, 0, 0), sf::Vector3<sf::Angle>(), sf::VideoMode::getDesktopMode().size);
 
@@ -62,8 +63,8 @@ int main() {
 
     while (window.isOpen()) {
         fps_text.setString(update_fps(clock, frame_times, current_frame, total_time));
-        while (const std::optional event = window.pollEvent()) {
-            if (event->is<sf::Event::Closed>() or sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+        while (auto event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>() || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
                 window.close();
             }
         }

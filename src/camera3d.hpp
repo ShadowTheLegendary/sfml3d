@@ -14,12 +14,13 @@
 #include <vector>
 
 #include "voxel.hpp"
+#include "object3d.hpp"
 
 namespace sf {
 	namespace _3D {
 
 		namespace {
-			Vector3<double> calculate_mean_center(const std::vector<Voxel>& voxels);
+			Vector3<double> calculate_mean_center(const std::vector<Object3D*>& objects);
 		}
 
 		class Camera3D : public Drawable {
@@ -42,7 +43,15 @@ namespace sf {
 
 			void draw(RenderTarget& target, RenderStates states) const override;
 
-			void update(std::vector<Voxel>& voxels);
+			void update(std::vector<Object3D*>& objects);
+
+			template<typename Container>
+			void update(Container& objects) {
+				std::vector<Object3D*> ptrs;
+				ptrs.reserve(objects.size());
+				for (auto& o : objects) ptrs.push_back(static_cast<Object3D*>(&o));
+				update(ptrs);
+			}
 
 		private:
 			Vector3f position;

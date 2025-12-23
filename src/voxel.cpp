@@ -217,14 +217,14 @@ namespace sf {
         }
 
         void Voxel::draw(RenderTarget& target) const {
-            int celing = 3;
+            int celing = 8;
             for (int i = 0; i < celing; i++) {
                 if (i > 5) {
                     return;
                 }
                 if (i_depth_sorted_shapes[i].second.color == sf::Color::Transparent) {
-                    celing += 1;
-                    continue;
+                    //celing += 1;
+                    //continue;
                 }
 
                 i_depth_sorted_shapes[i].second.draw(target);

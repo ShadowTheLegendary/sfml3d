@@ -8,29 +8,25 @@
 #include <algorithm>
 
 #include "camera3d.hpp"
+#include "object3d.hpp"
 
 namespace sf {
 	namespace _3D {
 
 		namespace {
-			Vector3<double> calculate_mean_center(const std::vector<Voxel>& voxels) {
-				if (voxels.empty()) {
+			Vector3<double> calculate_mean_center(const std::vector<Object3D*>& objects) {
+				if (objects.empty()) {
 					return Vector3 <double>(0.0f, 0.0f, 0.0f);
 				}
-				//if (voxels.size() == 1) {
-					//return voxels[0].get_center();
-				//}
 
 				Vector3 <double> sum(0.0f, 0.0f, 0.0f);
 
-				for (int i = 0; i < voxels.size(); i++) {
-					sum += voxels[i].get_center();
+				for (int i = 0; i < static_cast<int>(objects.size()); i++) {
+					sum += objects[i]->get_center();
 				}
 
-				double count = static_cast<double>(voxels.size());
+				double count = static_cast<double>(objects.size());
 				Vector3<double> mean = sum / count;
-
-				//std::cout << "mean: " << mean.x << ", " << mean.y << ", " << mean.z << "\n position" << voxels[0].get_center().x << ", " << voxels[0].get_center().y << ", " << voxels[0].get_center().z << "\n";
 
 				return mean;
 			}
@@ -73,26 +69,26 @@ namespace sf {
 			target.draw(Sprite(rt.getTexture()), states);
 		}
 
-		void Camera3D::update(std::vector<Voxel>& voxels) {
+		void Camera3D::update(std::vector<Object3D*>& objects) {
 			rt.clear(Color::Transparent);
-			std::vector<std::pair<double, Voxel>> depth_sorted_voxels;
-			depth_sorted_voxels.reserve(voxels.size());
+			std::vector<std::pair<double, Object3D*>> depth_sorted_objects;
+			depth_sorted_objects.reserve(objects.size());
 
-			sf::Vector3<double> mean = calculate_mean_center(voxels);
+			sf::Vector3<double> mean = calculate_mean_center(objects);
 			mean -= Vector3<double>(position);
 
-			for (Voxel& voxel : voxels) {
-				voxel.update(Vector3<double>(position), rotation, mean);
-				depth_sorted_voxels.emplace_back(voxel.perceived_z, voxel);
+			for (Object3D* object : objects) {
+				object->update(Vector3<double>(position), rotation, mean);
+				depth_sorted_objects.emplace_back(object->perceived_z, object);
 			}
 
-			std::sort(depth_sorted_voxels.begin(), depth_sorted_voxels.end(),
+			std::sort(depth_sorted_objects.begin(), depth_sorted_objects.end(),
 				[](const auto& a, const auto& b) {
 					return a.first > b.first;
 			});
 
-			for (auto& voxel : depth_sorted_voxels) {
-				voxel.second.draw(rt);
+			for (auto& object : depth_sorted_objects) {
+				object.second->draw(rt);
 			}
 			rt.display();
 		}
