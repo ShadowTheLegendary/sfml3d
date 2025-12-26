@@ -59,35 +59,6 @@ namespace sf {
 
                 return rotated;
             }
-
-            void OutlineRect::draw(RenderTarget& target) const {
-                VertexArray lines(PrimitiveType::LineStrip, 5);
-                lines[0].position = point1;
-                lines[1].position = point2;
-                lines[2].position = point3;
-                lines[3].position = point4;
-                lines[4].position = point1;
-
-                VertexArray tri1(PrimitiveType::Triangles, 3);
-                tri1[0].position = point1;
-                tri1[0].color = color;
-                tri1[1].position = point2;
-                tri1[1].color = color;
-                tri1[2].position = point3;
-                tri1[2].color = color;
-
-                VertexArray tri2(PrimitiveType::Triangles, 3);
-                tri2[0].position = point1;
-                tri2[0].color = color;
-                tri2[1].position = point3;
-                tri2[1].color = color;
-                tri2[2].position = point4;
-                tri2[2].color = color;
-
-                target.draw(tri1);
-                target.draw(tri2);
-                target.draw(lines);
-            }
         }
 
         Voxel::Voxel(Color color)
@@ -176,32 +147,29 @@ namespace sf {
 
             perceived_z = copy.center.z;
 
-            std::vector<std::pair<double, OutlineRect>> depth_sorted_shapes;
+            std::vector<std::pair<double, Rect2D>> depth_sorted_shapes;
             depth_sorted_shapes.reserve(6);
 
             for (int i = 0; i < static_cast<int>(FACE::END); i++) {
                 std::tuple<int, int, int, int> face = i_FACES.at(static_cast<FACE>(i));
-
-                OutlineRect shape;
-
-                if (color_by_face.find(static_cast<FACE>(i)) != color_by_face.end()) {
-                    shape.color = color_by_face[static_cast<FACE>(i)];
-                }
-                else {
-                    shape.color = color.value();
-                }
 
                 int one = std::get<0>(face);
                 int two = std::get<1>(face);
                 int three = std::get<2>(face);
                 int four = std::get<3>(face);
 
-                auto thing = Vector2f(copy.points[one].x, copy.points[one].y);
 
-                shape.point1 = Vector2f(copy.points[one].x, copy.points[one].y);
-                shape.point2 = Vector2f(copy.points[two].x, copy.points[two].y);
-                shape.point3 = Vector2f(copy.points[three].x, copy.points[three].y);
-                shape.point4 = Vector2f(copy.points[four].x, copy.points[four].y);
+                
+                Rect2D rect();
+
+                
+
+                if (color_by_face.find(static_cast<FACE>(i)) != color_by_face.end()) {
+                    rect.color = color_by_face[static_cast<FACE>(i)];
+                }
+                else {
+                    rect.color = color.value();
+                }
 
                 double averageZ = (copy.points[one].z + copy.points[two].z + copy.points[three].z + copy.points[four].z) / 4.0;
 

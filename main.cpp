@@ -38,9 +38,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().size), "My window", sf::State::Fullscreen);
     window.setFramerateLimit(60);
 
-    Voxel voxel(sf::Vector3<double>(8, 8, 8));
-    //voxel.set_face_color(Voxel::FACE::FRONT, sf::Color::Blue);
-    voxel.set_face_color(Voxel::FACE::BACK, sf::Color::Red);
+    /*Voxel voxel(sf::Vector3<double>(8, 8, 8));
+    voxel.color = sf::Color::Red;
 
     std::vector<Voxel> voxels;
     voxels.emplace_back(voxel);
@@ -60,9 +59,14 @@ int main() {
     sf::Text fps_text(font, update_fps(clock, frame_times, current_frame, total_time), 30U);
     fps_text.setFillColor(sf::Color::White);
     fps_text.setPosition({ 0, 0 });
+    */
+
+    // testing to draw a square out of a vertex array without quads because quads are deprecated
+
+
 
     while (window.isOpen()) {
-        fps_text.setString(update_fps(clock, frame_times, current_frame, total_time));
+        //fps_text.setString(update_fps(clock, frame_times, current_frame, total_time));
         while (auto event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>() || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
                 window.close();
@@ -70,7 +74,7 @@ int main() {
         }
 
         // camera controls
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+        /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
             camera.move({ -1, 0, 0 });
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
@@ -93,14 +97,14 @@ int main() {
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
             camera.rotate({ sf::degrees(-1), sf::degrees(0), sf::degrees(0) });
-        }
+        }*/
 
-        camera.update(voxels);
+        //camera.update(voxels);
 
         window.clear(sf::Color::Black);
 
-        window.draw(camera);
-        window.draw(fps_text);
+        //window.draw(vertex_square);
+        //window.draw(fps_text);
 
         window.display();
     }

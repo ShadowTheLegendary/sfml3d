@@ -13,6 +13,7 @@
 #include <unordered_map>
 
 #include "object3d.hpp"
+#include "flatrect3d.hpp"
 
 namespace sf {
     namespace _3D {
@@ -23,18 +24,6 @@ namespace sf {
 
         namespace {
             Vector3<double> rotate3D(const Vector3<double>& point, const Vector3<double>& center, const Vector3<double>& axis, Angle angle);
-
-            class OutlineRect {
-            public:
-                Vector2<float> point1;
-                Vector2<float> point2;
-                Vector2<float> point3;
-                Vector2<float> point4;
-
-                Color color;
-
-                void draw(RenderTarget& target) const;
-            };
         }
 
         /////////////////
@@ -120,7 +109,7 @@ namespace sf {
             std::vector < Vector3 < double > > points;
             Vector3<double> center;
 
-            std::vector<std::pair<double, OutlineRect>> i_depth_sorted_shapes;
+            std::vector<std::pair<double, Rect2D>> i_depth_sorted_shapes;
 
             const std::unordered_map < FACE, std::tuple<int, int, int, int> > i_FACES = {
                 {FACE::FRONT, std::make_tuple(4, 5, 6, 7)},
